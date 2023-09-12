@@ -1,7 +1,10 @@
 package com.example.librarymanagementsystem.repository;
 
+import com.example.librarymanagementsystem.Enum.Gender;
 import com.example.librarymanagementsystem.model.Student;
 import org.springframework.data.jpa.repository.JpaRepository;
+
+import java.util.List;
 
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     /*  1. We create repository as interface.
@@ -11,4 +14,6 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
         4. However, if someone wants to implement JPA Repository functions by himself, he can make Repository as a class and define implementations
         by himself. That class will be his own created ORM.
      */
+
+    List<Student> findByGender(Gender gender); // We can declare our own method this way. Hibernate will provide implementation to the function
 }

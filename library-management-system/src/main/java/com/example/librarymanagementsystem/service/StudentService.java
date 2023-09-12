@@ -70,12 +70,11 @@ public class StudentService {
     }
 
     public List<String> getAllMaleStudents() {
-        List<Student> allStudents = studentRepository.findAll();
+//      List<Student> allStudents = studentRepository.findAll(); // Finding all students using default method
+        List<Student> maleStudentObjects = studentRepository.findByGender(Gender.MALE); // finding only male students using custom method
         List<String> maleStudents = new ArrayList<>();
-        for(Student student : allStudents){
-            if(student.getGender().equals(Gender.MALE)){
-                maleStudents.add(student.getName());
-            }
+        for(Student student : maleStudentObjects){
+            maleStudents.add(student.getName());
         }
         return maleStudents;
     }

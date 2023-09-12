@@ -30,44 +30,4 @@ public class LibraryCard {
     Student student; // this is the entity to which FK will refer from the child table
     // Note: @JoinColumn(name = "employee_email_id", referencedColumnName = "email") to set FK column name manually and to reference FK to some other
     // column than PK in parent table.
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getCardNo() {
-        return cardNo;
-    }
-
-    public void setCardNo(String cardNo) {
-        this.cardNo = cardNo;
-    }
-
-    public CardStatus getCardStatus() {
-        return cardStatus;
-    }
-
-    public void setCardStatus(CardStatus cardStatus) {
-        this.cardStatus = cardStatus;
-    }
-
-    public Date getIssueDate() {
-        return IssueDate;
-    }
-
-    public void setIssueDate(Date issueDate) {
-        IssueDate = issueDate;
-    }
-
-    public Student getStudent() {
-        return student;
-    }
-
-    public void setStudent(Student student) {
-        this.student = student;
-    }
 }
