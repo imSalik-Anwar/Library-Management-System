@@ -1,5 +1,8 @@
 package com.example.librarymanagementsystem.controller;
 
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseAuthor;
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook;
+import com.example.librarymanagementsystem.DTO.resquestDTO.RequestBook;
 import com.example.librarymanagementsystem.Enum.Genre;
 import com.example.librarymanagementsystem.exception.AuthorNotFoundException;
 import com.example.librarymanagementsystem.exception.BookNotFoundException;
@@ -20,9 +23,9 @@ public class BookController {
     BookService bookService;
     //add book
     @PostMapping("/add")
-    public ResponseEntity<String> addBook(@RequestBody Book book){
+    public ResponseEntity addBook(@RequestBody RequestBook requestBook){
         try{
-            String response = bookService.addBook(book);
+            ResponseBook response = bookService.addBook(requestBook);
             return new ResponseEntity<>(response, HttpStatus.CREATED);
         }
         catch (AuthorNotFoundException e){
@@ -73,7 +76,7 @@ public class BookController {
     // give me the names of all the authors who write a particular genre
     @GetMapping("/authors-from-a-particular-genre/{genre}")
     public ResponseEntity authorsFromAGenre(@PathVariable("genre") Genre genre){
-        List<String> authorList = bookService.authorsFromAGenre(genre);
+        List<ResponseAuthor> authorList = bookService.authorsFromAGenre(genre);
         if(authorList.isEmpty()){
             return new ResponseEntity("No Author found under "+genre, HttpStatus.NOT_FOUND);
         }

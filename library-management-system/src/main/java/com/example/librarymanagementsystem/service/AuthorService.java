@@ -1,5 +1,7 @@
 package com.example.librarymanagementsystem.service;
 
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseAuthor;
+import com.example.librarymanagementsystem.DTO.resquestDTO.RequestAuthor;
 import com.example.librarymanagementsystem.exception.AuthorNotFoundException;
 import com.example.librarymanagementsystem.model.Author;
 import com.example.librarymanagementsystem.model.Book;
@@ -19,9 +21,22 @@ public class AuthorService {
     @Autowired
     AuthorRepository authorRepository;
 
-    public String addAuthor(Author author) {
-        Author author1 = authorRepository.save(author);
-        return "Author added successfully.";
+    public ResponseAuthor addAuthor(RequestAuthor requestAuthor) {
+        // create an author and set all the values coming from requestAuthor DTO
+        Author author = new Author();
+        author.setName(requestAuthor.getName());
+        author.setAge(requestAuthor.getAge());
+        author.setEmail(requestAuthor.getEmail());
+        // save the author
+        Author authorObj = authorRepository.save(author);
+        // create a responseAuthor DTO and set the returning values by taking from Author
+        ResponseAuthor responseAuthor = new ResponseAuthor();
+        responseAuthor.setName(authorObj.getName());
+        responseAuthor.setAge(authorObj.getAge());
+        responseAuthor.setEmail(authorObj.getEmail());
+        responseAuthor.setId(authorObj.getId());
+        return responseAuthor;
+
     }
 
     public String updateEmail(int authorId, String email) {
@@ -48,11 +63,16 @@ public class AuthorService {
         return bookList;
     }
 
-    public List<String> writersWithXNumberOfBooks(int count) {
-        List<String> responseList = new ArrayList<>();
+    public List<ResponseAuthor> writersWithXNumberOfBooks(int count) {
+        List<ResponseAuthor> responseList = new ArrayList<>();
         for(Author author : authorRepository.findAll()){
             if(author.getBooks().size() == count){
-                responseList.add(author.getName());
+                ResponseAuthor responseAuthor = new ResponseAuthor();
+                responseAuthor.setId(author.getId());
+                responseAuthor.setName(author.getName());
+                responseAuthor.setAge(author.getAge());
+                responseAuthor.setEmail(author.getEmail());
+                responseList.add(responseAuthor);
             }
         }
         return responseList;

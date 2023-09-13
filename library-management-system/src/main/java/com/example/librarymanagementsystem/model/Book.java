@@ -5,6 +5,9 @@ import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
@@ -29,4 +32,8 @@ public class Book {
     @ManyToOne
     @JoinColumn
     Author author;
+
+    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+    List<Transaction> transactions = new ArrayList<>(); // when new book will be added, it will initially have
+    // no transactions so we initialize an empty arraylist for transactions initially.
 }

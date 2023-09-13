@@ -6,6 +6,8 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 import org.hibernate.annotations.CreationTimestamp;
 import java.sql.Date;
+import java.util.ArrayList;
+import java.util.List;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @Entity
@@ -30,4 +32,8 @@ public class LibraryCard {
     Student student; // this is the entity to which FK will refer from the child table
     // Note: @JoinColumn(name = "employee_email_id", referencedColumnName = "email") to set FK column name manually and to reference FK to some other
     // column than PK in parent table.
+
+    @OneToMany(mappedBy = "libraryCard", cascade = CascadeType.ALL)
+    List<Transaction> transactions = new ArrayList<>(); // when new book will be added, it will initially have
+    // no transactions so we initialize an empty arraylist for transactions initially.
 }

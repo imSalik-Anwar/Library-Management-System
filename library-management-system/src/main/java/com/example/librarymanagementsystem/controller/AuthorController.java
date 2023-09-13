@@ -1,9 +1,10 @@
 package com.example.librarymanagementsystem.controller;
 
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseAuthor;
+import com.example.librarymanagementsystem.DTO.resquestDTO.RequestAuthor;
 import com.example.librarymanagementsystem.exception.AuthorNotFoundException;
 import com.example.librarymanagementsystem.model.Author;
 import com.example.librarymanagementsystem.service.AuthorService;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,8 @@ public class AuthorController {
 
     // Add author in DB
     @PostMapping("/add")
-    public ResponseEntity<String> addAuthor(@RequestBody Author author){
-        String response = authorService.addAuthor(author);
+    public ResponseEntity<ResponseAuthor> addAuthor(@RequestBody RequestAuthor requestAuthor){
+        ResponseAuthor response = authorService.addAuthor(requestAuthor);
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
@@ -47,7 +48,7 @@ public class AuthorController {
     // give me the names of authors who have written more than 'x' number of books
     @GetMapping("/writers-with-x-number-of-books")
     public ResponseEntity writersWithXNumberOfBooks(@RequestParam("number") int count){
-            List<String> list = authorService.writersWithXNumberOfBooks(count);
+            List<ResponseAuthor> list = authorService.writersWithXNumberOfBooks(count);
             if(list.isEmpty()){
                 return new ResponseEntity("No Author has "+count+" books.", HttpStatus.OK);
             }
