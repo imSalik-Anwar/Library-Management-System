@@ -2,6 +2,7 @@ package com.example.librarymanagementsystem.service;
 
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseAuthor;
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook;
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook_AuthorAndGenre;
 import com.example.librarymanagementsystem.DTO.resquestDTO.RequestBook;
 import com.example.librarymanagementsystem.Enum.Genre;
 import com.example.librarymanagementsystem.exception.AuthorNotFoundException;
@@ -51,56 +52,51 @@ public class BookService {
     }
 
     public String deleteABook(String title) {
-        boolean bookDeleted = false;
-        for(Author author : authorRepository.findAll()){
-            List<Book> bookList = author.getBooks();
-            for(Book book : bookList){
-                if(book.getTitle().equals(title)){
-                    bookList.remove(book);
-                    bookRepository.delete(book);
-                    author.setBooks(bookList);
-                    authorRepository.save(author);
-                    bookDeleted = true;
-                    break;
-                }
-            }
-            if(bookDeleted){
-                break;
-            }
-        }
-        if(!bookDeleted){
+        Optional<Book> bookOptional = Optional.ofNullable(bookRepository.findByTitle(title));
+        if(!bookOptional.isPresent()){
             throw new BookNotFoundException("Book does not exists.");
         }
+        bookRepository.delete(bookOptional.get());
         return "Book deleted successfully.";
     }
 
-    public List<String> bookFromAGenre(Genre genre) {
+    public List<ResponseBook_AuthorAndGenre> bookFromAGenre(Genre genre) {
         List<Book> bookList = bookRepository.findByGenre(genre);
-        List<String> responseList = new ArrayList<>();
+        List<ResponseBook_AuthorAndGenre> responseList = new ArrayList<>();
         for(Book book : bookList){
-            responseList.add(book.getTitle());
+            ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = new ResponseBook_AuthorAndGenre();
+            responseBookAuthorAndGenre.setTitle(book.getTitle());
+            responseBookAuthorAndGenre.setGenre(book.getGenre());
+            responseBookAuthorAndGenre.setAuthorName(book.getAuthor().getName());
+            responseList.add(responseBookAuthorAndGenre);
         }
         return responseList;
     }
 
-    public List<String> bookFromAGenreCosting500(Genre genre) {
+    public List<ResponseBook_AuthorAndGenre> bookFromAGenreCosting500(Genre genre) {
         List<Book> bookList = bookRepository.findByGenre(genre);
-        List<String> responseList = new ArrayList<>();
+        List<ResponseBook_AuthorAndGenre> responseList = new ArrayList<>();
         for(Book book : bookList){
             if(book.getCost() == 500) {
-                responseList.add(book.getTitle());
+                ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = new ResponseBook_AuthorAndGenre();
+                responseBookAuthorAndGenre.setAuthorName(book.getAuthor().getName());
+                responseBookAuthorAndGenre.setTitle(book.getTitle());
+                responseBookAuthorAndGenre.setGenre(book.getGenre());
+                responseList.add(responseBookAuthorAndGenre);
             }
         }
         return responseList;
     }
 
-    public List<String> booksHavingPagesAtoB(int minPage, int maxPage) {
-        List<Book> bookList = bookRepository.findAll();
-        List<String> responseList = new ArrayList<>();
+    public List<ResponseBook_AuthorAndGenre> booksHavingPagesAtoB(int minPage, int maxPage) {
+        List<Book> bookList = bookRepository.findBookHavingPagesBetweenAandB(minPage, maxPage);
+        List<ResponseBook_AuthorAndGenre> responseList = new ArrayList<>();
         for(Book book : bookList){
-            if(book.getNoOfPages() >= minPage && book.getNoOfPages() <= maxPage) {
-                responseList.add(book.getTitle());
-            }
+            ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = new ResponseBook_AuthorAndGenre();
+            responseBookAuthorAndGenre.setAuthorName(book.getAuthor().getName());
+            responseBookAuthorAndGenre.setTitle(book.getTitle());
+            responseBookAuthorAndGenre.setGenre(book.getGenre());
+            responseList.add(responseBookAuthorAndGenre);
         }
         return responseList;
     }

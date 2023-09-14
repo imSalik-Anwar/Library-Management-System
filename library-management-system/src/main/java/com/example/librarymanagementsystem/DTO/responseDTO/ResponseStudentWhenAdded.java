@@ -1,6 +1,6 @@
 package com.example.librarymanagementsystem.DTO.responseDTO;
 
-import com.example.librarymanagementsystem.Enum.Genre;
+import com.example.librarymanagementsystem.Enum.Gender;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
@@ -9,9 +9,6 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseBook extends ResponseBook_AuthorAndGenre{
-
-    int noOfPages;
-
-    double cost;
+public class ResponseStudentWhenAdded extends ResponseStudent{
+    ResponseLibraryCard responseLibraryCard;
 }

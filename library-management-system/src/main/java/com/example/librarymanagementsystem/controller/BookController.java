@@ -2,6 +2,7 @@ package com.example.librarymanagementsystem.controller;
 
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseAuthor;
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook;
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook_AuthorAndGenre;
 import com.example.librarymanagementsystem.DTO.resquestDTO.RequestBook;
 import com.example.librarymanagementsystem.Enum.Genre;
 import com.example.librarymanagementsystem.exception.AuthorNotFoundException;
@@ -47,7 +48,7 @@ public class BookController {
     // give me names of all the books of a particular genre
     @GetMapping("/books-from-particular-genre")
     public ResponseEntity bookFromAGenre(@RequestParam("genre")Genre genre){
-        List<String> bookList = bookService.bookFromAGenre(genre);
+        List<ResponseBook_AuthorAndGenre> bookList = bookService.bookFromAGenre(genre);
         if(bookList.isEmpty()){
             return new ResponseEntity("No Books found under "+genre, HttpStatus.NOT_FOUND);
         }
@@ -57,7 +58,7 @@ public class BookController {
     // give me names of all the books of a particular genre and cost greater than 500 rs
     @GetMapping("/books-from-particular-genre-costing-500")
     public ResponseEntity bookFromAGenreCosting500(@RequestParam("genre")Genre genre){
-        List<String> bookList = bookService.bookFromAGenreCosting500(genre);
+        List<ResponseBook_AuthorAndGenre> bookList = bookService.bookFromAGenreCosting500(genre);
         if(bookList.isEmpty()){
             return new ResponseEntity("No Books found under "+genre+" for 500 Rs.", HttpStatus.NOT_FOUND);
         }
@@ -67,7 +68,7 @@ public class BookController {
     // give me all the books having number of pages between 'a' and 'b'
     @GetMapping("/books-having-pages-between-a-to-b")
     public ResponseEntity booksHavingPagesAtoB(@RequestParam("min")int minPage, @RequestParam("max") int maxPage){
-        List<String> bookList = bookService.booksHavingPagesAtoB(minPage, maxPage);
+        List<ResponseBook_AuthorAndGenre> bookList = bookService.booksHavingPagesAtoB(minPage, maxPage);
         if(bookList.isEmpty()){
             return new ResponseEntity("No Books found having pages between "+minPage+" and "+maxPage, HttpStatus.NOT_FOUND);
         }

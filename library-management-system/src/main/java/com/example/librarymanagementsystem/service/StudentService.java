@@ -1,7 +1,12 @@
 package com.example.librarymanagementsystem.service;
 
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseLibraryCard;
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseStudent;
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseStudentWhenAdded;
+import com.example.librarymanagementsystem.DTO.resquestDTO.RequestStudent;
 import com.example.librarymanagementsystem.Enum.CardStatus;
 import com.example.librarymanagementsystem.Enum.Gender;
+import com.example.librarymanagementsystem.exception.StudentNotFoundException;
 import com.example.librarymanagementsystem.model.LibraryCard;
 import com.example.librarymanagementsystem.repository.StudentRepository;
 import com.example.librarymanagementsystem.model.Student;
@@ -10,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -21,32 +25,58 @@ public class StudentService {
     @Autowired
     StudentRepository studentRepository;
 
-    public String addStudent(Student student) {
+    public ResponseStudentWhenAdded addStudent(RequestStudent requestStudent) {
+        Student student = new Student();
+        student.setName(requestStudent.getName());
+        student.setAge(requestStudent.getAge());
+        student.setEmail(requestStudent.getEmail());
+        student.setGender(requestStudent.getGender());
+
         LibraryCard libraryCard = new LibraryCard();
         libraryCard.setCardNo(String.valueOf(UUID.randomUUID()));
         libraryCard.setCardStatus(CardStatus.ACTIVE);
         libraryCard.setStudent(student);
 
         student.setLibraryCard(libraryCard);
-        studentRepository.save(student);
-        return "Student saved";
+
+
+        Student savedStudent = studentRepository.save(student);
+
+        ResponseStudentWhenAdded responseStudentWhenAdded = new ResponseStudentWhenAdded();
+        responseStudentWhenAdded.setName(savedStudent.getName());
+        responseStudentWhenAdded.setAge(savedStudent.getAge());
+        responseStudentWhenAdded.setGender(savedStudent.getGender());
+
+        ResponseLibraryCard responseLibraryCard = new ResponseLibraryCard();
+        responseLibraryCard.setCardNo(savedStudent.getLibraryCard().getCardNo());
+        responseLibraryCard.setCardStatus(savedStudent.getLibraryCard().getCardStatus());
+        responseLibraryCard.setIssueDate(savedStudent.getLibraryCard().getIssueDate());
+
+        responseStudentWhenAdded.setResponseLibraryCard(responseLibraryCard);
+
+        return responseStudentWhenAdded;
     }
 
-    public Student getStudent(int regNo) {
-        Optional<Student> student = studentRepository.findById(regNo);
-        if(student.isPresent()){
-            return student.get();
+    public ResponseStudent getStudent(int regNo) {
+        Optional<Student> studentOptional = studentRepository.findById(regNo);
+        if(!studentOptional.isPresent()){
+            throw  new StudentNotFoundException("Student does not exists.");
         }
-        return null;
+        Student student = studentOptional.get();
+        ResponseStudent responseStudent = new ResponseStudent();
+        responseStudent.setName(student.getName());
+        responseStudent.setAge(student.getAge());
+        responseStudent.setGender(student.getGender());
+        return responseStudent;
     }
 
     public ResponseEntity<String> deleteStudent(int regNo) {
         Optional<Student> student = studentRepository.findById(regNo);
-        if(student.isPresent()){
-            studentRepository.deleteById(regNo);
-            return new ResponseEntity<>("Student deleted", HttpStatus.OK);
+        if(!student.isPresent()){
+            throw new StudentNotFoundException("Student does not exists.");
         }
-        return new ResponseEntity<>("Invalid Id", HttpStatus.BAD_REQUEST);
+        studentRepository.deleteById(regNo);
+        return new ResponseEntity<>("Student deleted", HttpStatus.OK);
     }
 
     public ResponseEntity<String> updateStudent(int regNo, int newAge) {
@@ -60,21 +90,29 @@ public class StudentService {
         return new ResponseEntity<>("Invalid Id", HttpStatus.BAD_REQUEST);
     }
 
-    public List<String> getAllStudents() {
+    public List<ResponseStudent> getAllStudents() {
         List<Student> list = studentRepository.findAll();
-        List<String> allStudents = new ArrayList<>();
+        List<ResponseStudent> allStudents = new ArrayList<>();
         for(Student student : list){
-            allStudents.add(student.getName());
+            ResponseStudent responseStudent = new ResponseStudent();
+            responseStudent.setName(student.getName());
+            responseStudent.setAge(student.getAge());
+            responseStudent.setGender(student.getGender());
+            allStudents.add(responseStudent);
         }
         return allStudents;
     }
 
-    public List<String> getAllMaleStudents() {
+    public List<ResponseStudent> getAllMaleStudents() {
 //      List<Student> allStudents = studentRepository.findAll(); // Finding all students using default method
         List<Student> maleStudentObjects = studentRepository.findByGender(Gender.MALE); // finding only male students using custom method
-        List<String> maleStudents = new ArrayList<>();
+        List<ResponseStudent> maleStudents = new ArrayList<>();
         for(Student student : maleStudentObjects){
-            maleStudents.add(student.getName());
+            ResponseStudent responseStudent = new ResponseStudent();
+            responseStudent.setName(student.getName());
+            responseStudent.setAge(student.getAge());
+            responseStudent.setGender(student.getGender());
+            maleStudents.add(responseStudent);
         }
         return maleStudents;
     }

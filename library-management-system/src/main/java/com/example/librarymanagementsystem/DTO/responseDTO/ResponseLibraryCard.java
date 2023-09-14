@@ -1,17 +1,20 @@
 package com.example.librarymanagementsystem.DTO.responseDTO;
 
-import com.example.librarymanagementsystem.Enum.Genre;
+import com.example.librarymanagementsystem.Enum.CardStatus;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+
+import java.sql.Date;
 
 @FieldDefaults(level = AccessLevel.PRIVATE)
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseBook extends ResponseBook_AuthorAndGenre{
+public class ResponseLibraryCard {
+    String cardNo;
 
-    int noOfPages;
+    CardStatus cardStatus;
 
-    double cost;
+    Date IssueDate;
 }

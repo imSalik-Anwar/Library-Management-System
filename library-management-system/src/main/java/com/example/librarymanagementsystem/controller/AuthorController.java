@@ -1,6 +1,7 @@
 package com.example.librarymanagementsystem.controller;
 
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseAuthor;
+import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook_AuthorAndGenre;
 import com.example.librarymanagementsystem.DTO.resquestDTO.RequestAuthor;
 import com.example.librarymanagementsystem.exception.AuthorNotFoundException;
 import com.example.librarymanagementsystem.model.Author;
@@ -39,7 +40,7 @@ public class AuthorController {
     @GetMapping("/all-books-by-an-author")
     public ResponseEntity getBooksByAnAuthor(@RequestParam("id") int authorId){
         try{
-            List<String> list = authorService.getBooksByAnAuthor(authorId);
+            List<ResponseBook_AuthorAndGenre> list = authorService.getBooksByAnAuthor(authorId);
             return new ResponseEntity(list, HttpStatus.FOUND);
         } catch (AuthorNotFoundException e){
             return new ResponseEntity(e.getMessage(), HttpStatus.BAD_REQUEST);
