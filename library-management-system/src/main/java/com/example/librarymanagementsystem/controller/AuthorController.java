@@ -4,7 +4,6 @@ import com.example.librarymanagementsystem.DTO.responseDTO.ResponseAuthor;
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook_AuthorAndGenre;
 import com.example.librarymanagementsystem.DTO.resquestDTO.RequestAuthor;
 import com.example.librarymanagementsystem.exception.AuthorNotFoundException;
-import com.example.librarymanagementsystem.model.Author;
 import com.example.librarymanagementsystem.service.AuthorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

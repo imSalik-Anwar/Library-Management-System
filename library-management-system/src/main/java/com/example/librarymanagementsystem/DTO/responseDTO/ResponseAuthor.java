@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class ResponseAuthor {
     int id;
 

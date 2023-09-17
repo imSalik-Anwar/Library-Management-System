@@ -14,6 +14,7 @@ import java.util.List;
 @Getter
 @Setter
 @Entity
+@Builder
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

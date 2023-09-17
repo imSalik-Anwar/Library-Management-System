@@ -9,6 +9,13 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseStudentWhenAdded extends ResponseStudent{
+@Builder
+public class ResponseStudentWhenAdded{
+    String name;
+
+    int age;
+
+    Gender gender;
+
     ResponseLibraryCard responseLibraryCard;
 }

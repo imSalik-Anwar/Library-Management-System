@@ -6,6 +6,7 @@ import com.example.librarymanagementsystem.DTO.responseDTO.ResponseStudentWhenAd
 import com.example.librarymanagementsystem.DTO.resquestDTO.RequestStudent;
 import com.example.librarymanagementsystem.Enum.CardStatus;
 import com.example.librarymanagementsystem.Enum.Gender;
+import com.example.librarymanagementsystem.converters.StudentConverter;
 import com.example.librarymanagementsystem.exception.StudentNotFoundException;
 import com.example.librarymanagementsystem.model.LibraryCard;
 import com.example.librarymanagementsystem.repository.StudentRepository;
@@ -26,31 +27,24 @@ public class StudentService {
     StudentRepository studentRepository;
 
     public ResponseStudentWhenAdded addStudent(RequestStudent requestStudent) {
-        Student student = new Student();
-        student.setName(requestStudent.getName());
-        student.setAge(requestStudent.getAge());
-        student.setEmail(requestStudent.getEmail());
-        student.setGender(requestStudent.getGender());
+        Student student = StudentConverter.fromReqStudentToStudent(requestStudent);
 
-        LibraryCard libraryCard = new LibraryCard();
-        libraryCard.setCardNo(String.valueOf(UUID.randomUUID()));
-        libraryCard.setCardStatus(CardStatus.ACTIVE);
+        LibraryCard libraryCard = LibraryCard.builder().
+                cardNo(String.valueOf(UUID.randomUUID())).
+                cardStatus(CardStatus.ACTIVE).
+                build();
+
         libraryCard.setStudent(student);
-
         student.setLibraryCard(libraryCard);
-
-
         Student savedStudent = studentRepository.save(student);
 
-        ResponseStudentWhenAdded responseStudentWhenAdded = new ResponseStudentWhenAdded();
-        responseStudentWhenAdded.setName(savedStudent.getName());
-        responseStudentWhenAdded.setAge(savedStudent.getAge());
-        responseStudentWhenAdded.setGender(savedStudent.getGender());
+        ResponseStudentWhenAdded responseStudentWhenAdded = StudentConverter.fromStudentToResponseStudentWhenAdded(student);
 
-        ResponseLibraryCard responseLibraryCard = new ResponseLibraryCard();
-        responseLibraryCard.setCardNo(savedStudent.getLibraryCard().getCardNo());
-        responseLibraryCard.setCardStatus(savedStudent.getLibraryCard().getCardStatus());
-        responseLibraryCard.setIssueDate(savedStudent.getLibraryCard().getIssueDate());
+        ResponseLibraryCard responseLibraryCard = ResponseLibraryCard.builder().
+                cardNo(savedStudent.getLibraryCard().getCardNo()).
+                cardStatus(savedStudent.getLibraryCard().getCardStatus()).
+                issueDate(savedStudent.getLibraryCard().getIssueDate()).
+                build();
 
         responseStudentWhenAdded.setResponseLibraryCard(responseLibraryCard);
 
@@ -63,10 +57,7 @@ public class StudentService {
             throw  new StudentNotFoundException("Student does not exists.");
         }
         Student student = studentOptional.get();
-        ResponseStudent responseStudent = new ResponseStudent();
-        responseStudent.setName(student.getName());
-        responseStudent.setAge(student.getAge());
-        responseStudent.setGender(student.getGender());
+        ResponseStudent responseStudent = StudentConverter.fromStudentResStudent(student);
         return responseStudent;
     }
 
@@ -94,10 +85,7 @@ public class StudentService {
         List<Student> list = studentRepository.findAll();
         List<ResponseStudent> allStudents = new ArrayList<>();
         for(Student student : list){
-            ResponseStudent responseStudent = new ResponseStudent();
-            responseStudent.setName(student.getName());
-            responseStudent.setAge(student.getAge());
-            responseStudent.setGender(student.getGender());
+            ResponseStudent responseStudent = StudentConverter.fromStudentResStudent(student);
             allStudents.add(responseStudent);
         }
         return allStudents;
@@ -108,10 +96,7 @@ public class StudentService {
         List<Student> maleStudentObjects = studentRepository.findByGender(Gender.MALE); // finding only male students using custom method
         List<ResponseStudent> maleStudents = new ArrayList<>();
         for(Student student : maleStudentObjects){
-            ResponseStudent responseStudent = new ResponseStudent();
-            responseStudent.setName(student.getName());
-            responseStudent.setAge(student.getAge());
-            responseStudent.setGender(student.getGender());
+            ResponseStudent responseStudent = StudentConverter.fromStudentResStudent(student);
             maleStudents.add(responseStudent);
         }
         return maleStudents;

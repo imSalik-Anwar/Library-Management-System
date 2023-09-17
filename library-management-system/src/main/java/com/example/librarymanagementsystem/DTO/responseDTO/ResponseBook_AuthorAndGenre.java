@@ -10,6 +10,7 @@ import org.aspectj.weaver.GeneratedReferenceTypeDelegate;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ResponseBook_AuthorAndGenre {
     String title;
 

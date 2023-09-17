@@ -9,9 +9,16 @@ import lombok.experimental.FieldDefaults;
 @AllArgsConstructor
 @Getter
 @Setter
-public class ResponseBook extends ResponseBook_AuthorAndGenre{
+@Builder
+public class ResponseBook{
+
+    String title;
 
     int noOfPages;
 
     double cost;
+
+    String authorName;
+
+    Genre genre;
 }

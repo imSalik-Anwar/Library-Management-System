@@ -14,6 +14,7 @@ import lombok.experimental.FieldDefaults;
 @Table(name = "student_info") // names the tables in the database. If not used, Hibernate will name table as the class name i.e. Student
 // we should never change table name midway using @Table because it creates a new table rather than renaming existing table.
 // however, we can change the name of existing table by performing Alter command on DB rather using Hibernate.
+@Builder // for using lombok feature to build objects of respective class
 public class Student {
     @Id // tells Hibernate that this attribute is the Primary key and can not be null or duplicate
     @GeneratedValue(strategy = GenerationType.IDENTITY) // Implements AUTO INCREMENT on primary key

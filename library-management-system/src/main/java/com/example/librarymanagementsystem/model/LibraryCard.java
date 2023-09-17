@@ -16,6 +16,7 @@ import java.util.List;
 @Getter
 @Setter
 @Table(name = "library_card")
+@Builder
 public class LibraryCard {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

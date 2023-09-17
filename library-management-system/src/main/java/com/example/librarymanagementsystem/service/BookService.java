@@ -5,6 +5,9 @@ import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook;
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook_AuthorAndGenre;
 import com.example.librarymanagementsystem.DTO.resquestDTO.RequestBook;
 import com.example.librarymanagementsystem.Enum.Genre;
+import com.example.librarymanagementsystem.converters.AuthorConverter;
+import com.example.librarymanagementsystem.converters.BookConverter;
+import com.example.librarymanagementsystem.converters.StudentConverter;
 import com.example.librarymanagementsystem.exception.AuthorNotFoundException;
 import com.example.librarymanagementsystem.exception.BookNotFoundException;
 import com.example.librarymanagementsystem.model.Author;
@@ -32,20 +35,24 @@ public class BookService {
             throw new AuthorNotFoundException("Author does not exists.");
         }
         Author author = authorOptional.get();
-        Book book = new Book();
-        book.setAuthor(author);
-        book.setTitle(requestBook.getTitle());
-        book.setGenre(requestBook.getGenre());
-        book.setCost(requestBook.getCost());
-        book.setNoOfPages(requestBook.getNoOfPages());
+        Book book = Book.builder().
+                author(author).
+                title(requestBook.getTitle()).
+                genre(requestBook.getGenre()).
+                cost(requestBook.getCost()).
+                noOfPages(requestBook.getNoOfPages()).
+                build();
         author.getBooks().add(book);
         authorRepository.save(author);
 
-        ResponseBook responseBook = new ResponseBook();
-        responseBook.setTitle(book.getTitle());
-        responseBook.setCost(book.getCost());
-        responseBook.setNoOfPages(book.getNoOfPages());
-        responseBook.setGenre(book.getGenre());
+        ResponseBook responseBook = BookConverter.fromBookToResBook(book);
+//                ResponseBook.builder().
+//                cost(book.getCost()).
+//                noOfPages(book.getNoOfPages()).
+//                title(book.getTitle()).
+//                genre(book.getGenre()).
+//                authorName(author.getName()).
+//                build();
 
         return responseBook;
 
@@ -64,10 +71,7 @@ public class BookService {
         List<Book> bookList = bookRepository.findByGenre(genre);
         List<ResponseBook_AuthorAndGenre> responseList = new ArrayList<>();
         for(Book book : bookList){
-            ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = new ResponseBook_AuthorAndGenre();
-            responseBookAuthorAndGenre.setTitle(book.getTitle());
-            responseBookAuthorAndGenre.setGenre(book.getGenre());
-            responseBookAuthorAndGenre.setAuthorName(book.getAuthor().getName());
+            ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = BookConverter.fromBookToResBook_AuthorAndGenre(book);
             responseList.add(responseBookAuthorAndGenre);
         }
         return responseList;
@@ -78,10 +82,7 @@ public class BookService {
         List<ResponseBook_AuthorAndGenre> responseList = new ArrayList<>();
         for(Book book : bookList){
             if(book.getCost() == 500) {
-                ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = new ResponseBook_AuthorAndGenre();
-                responseBookAuthorAndGenre.setAuthorName(book.getAuthor().getName());
-                responseBookAuthorAndGenre.setTitle(book.getTitle());
-                responseBookAuthorAndGenre.setGenre(book.getGenre());
+                ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = BookConverter.fromBookToResBook_AuthorAndGenre(book);
                 responseList.add(responseBookAuthorAndGenre);
             }
         }
@@ -92,10 +93,7 @@ public class BookService {
         List<Book> bookList = bookRepository.findBookHavingPagesBetweenAandB(minPage, maxPage);
         List<ResponseBook_AuthorAndGenre> responseList = new ArrayList<>();
         for(Book book : bookList){
-            ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = new ResponseBook_AuthorAndGenre();
-            responseBookAuthorAndGenre.setAuthorName(book.getAuthor().getName());
-            responseBookAuthorAndGenre.setTitle(book.getTitle());
-            responseBookAuthorAndGenre.setGenre(book.getGenre());
+            ResponseBook_AuthorAndGenre responseBookAuthorAndGenre = BookConverter.fromBookToResBook_AuthorAndGenre(book);
             responseList.add(responseBookAuthorAndGenre);
         }
         return responseList;
@@ -109,11 +107,7 @@ public class BookService {
             set.add(book.getAuthor());
         }
         for(Author author : set){
-            ResponseAuthor responseAuthor = new ResponseAuthor();
-            responseAuthor.setId(author.getId());
-            responseAuthor.setName(author.getName());
-            responseAuthor.setAge(author.getAge());
-            responseAuthor.setEmail(author.getEmail());
+            ResponseAuthor responseAuthor = AuthorConverter.fromAuthorToResponseAuthor(author);
             responseList.add(responseAuthor);
         }
         return responseList;

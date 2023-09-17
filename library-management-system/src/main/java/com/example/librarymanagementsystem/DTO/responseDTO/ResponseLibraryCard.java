@@ -11,10 +11,11 @@ import java.sql.Date;
 @AllArgsConstructor
 @Getter
 @Setter
+@Builder
 public class ResponseLibraryCard {
     String cardNo;
 
     CardStatus cardStatus;
 
-    Date IssueDate;
+    Date issueDate;
 }
