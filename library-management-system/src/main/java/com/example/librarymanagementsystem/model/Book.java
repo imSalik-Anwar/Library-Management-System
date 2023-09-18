@@ -25,6 +25,8 @@ public class Book {
 
     int noOfPages;
 
+    boolean isIssued;
+
     @Enumerated(EnumType.STRING)
     Genre genre;
 

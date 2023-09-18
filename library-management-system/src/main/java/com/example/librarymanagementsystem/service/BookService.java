@@ -41,18 +41,12 @@ public class BookService {
                 genre(requestBook.getGenre()).
                 cost(requestBook.getCost()).
                 noOfPages(requestBook.getNoOfPages()).
+                isIssued(false).
                 build();
         author.getBooks().add(book);
         authorRepository.save(author);
 
         ResponseBook responseBook = BookConverter.fromBookToResBook(book);
-//                ResponseBook.builder().
-//                cost(book.getCost()).
-//                noOfPages(book.getNoOfPages()).
-//                title(book.getTitle()).
-//                genre(book.getGenre()).
-//                authorName(author.getName()).
-//                build();
 
         return responseBook;
 

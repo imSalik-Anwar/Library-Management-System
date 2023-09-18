@@ -2,7 +2,6 @@ package com.example.librarymanagementsystem.converters;
 
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook;
 import com.example.librarymanagementsystem.DTO.responseDTO.ResponseBook_AuthorAndGenre;
-import com.example.librarymanagementsystem.DTO.resquestDTO.RequestBook;
 import com.example.librarymanagementsystem.model.Book;
 
 public class BookConverter {

@@ -14,16 +14,18 @@ import java.util.Date;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Transaction {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
 
-    String transactionNumber;
+    String transactionNumber; // uuid
 
     @CreationTimestamp
     Date transactionDate;
 
+    @Enumerated(EnumType.STRING)
     TransactionStatus transactionStatus;
 
     @ManyToOne
