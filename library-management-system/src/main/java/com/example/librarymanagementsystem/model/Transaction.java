@@ -25,7 +25,7 @@ public class Transaction {
     @CreationTimestamp
     Date transactionDate;
 
-    @Enumerated(EnumType.STRING)
+//    @Enumerated(EnumType.STRING)
     TransactionStatus transactionStatus;
 
     @ManyToOne

@@ -2,6 +2,7 @@ package com.example.librarymanagementsystem.DTO.responseDTO;
 
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.hibernate.annotations.CreationTimestamp;
 
 import java.util.Date;
 
@@ -19,6 +20,7 @@ public class ResponseTransaction {
 
     String bookTitle;
 
+    @CreationTimestamp
     Date issueDate;
 
     String authorName;
